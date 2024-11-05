@@ -8,7 +8,12 @@ async function redirect(request: NextRequest, url: string) {
 async function checkAuth() {
   const cookieStore = cookies();
   const auth = cookieStore.get("session");
-  return auth?.value == null;
+
+  if (auth?.value) {
+    return true;
+  }
+
+  return false;
 }
 
 const allowedPathsIfNotAuth = ["/auth/login", "/auth/register"];
@@ -19,6 +24,10 @@ export async function middleware(request: NextRequest) {
 
   if (!isAuth && !allowedPathsIfNotAuth.includes(pathname)) {
     return redirect(request, "/auth/login");
+  }
+
+  if (isAuth && allowedPathsIfNotAuth.includes(pathname)) {
+    return redirect(request, "/");
   }
 }
 
