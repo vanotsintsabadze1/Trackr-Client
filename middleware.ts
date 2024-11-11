@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isAuth && allowedPathsIfNotAuth.includes(pathname)) {
-    return redirect(request, "/");
+    return redirect(request, "/dashboard");
   }
 }
 

@@ -2,10 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  primary: #18181b;
+  secondary: #faf9f6;
+}
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --background: #18181b;
+    --foreground: #faf9f6;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
@@ -31,8 +36,8 @@
     --radius: 0.5rem;
   }
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: #18181b;
+    --foreground: #faf9f6;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
@@ -64,4 +69,18 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+button {
+  transition: opacity 0.5s ease; /* Smooth transition */
+}
+
+button:active {
+  opacity: 0.6; /* Lower opacity on click */
 }
