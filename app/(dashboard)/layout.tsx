@@ -1,18 +1,16 @@
-import CustomSideBarTrigger from "@/components/ui/custom-sidebar-button";
 import {
   Sidebar,
   SidebarProvider,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarHeader,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Calendar, Home, Notebook, Settings } from "lucide-react";
+import { Calendar, Home, Notebook, Settings, Wallet } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardLayout({
@@ -27,14 +25,19 @@ export default function DashboardLayout({
       icon: Home,
     },
     {
-      title: "Calendar",
-      url: "/calendar",
-      icon: Calendar,
+      title: "Finances",
+      url: "/finances",
+      icon: Wallet,
     },
     {
       title: "Notes",
       url: "/notes",
       icon: Notebook,
+    },
+    {
+      title: "Calendar",
+      url: "/calendar",
+      icon: Calendar,
     },
     {
       title: "Settings",
@@ -45,7 +48,7 @@ export default function DashboardLayout({
 
   return (
     <SidebarProvider>
-      <main className="flex">
+      <main className="flex w-dvw min-h-dvh">
         <Sidebar>
           <SidebarContent>
             <SidebarGroup>
@@ -83,7 +86,7 @@ export default function DashboardLayout({
             </span>
           </SidebarFooter>
         </Sidebar>
-        <div className="fixed left-0 top-0 p-2 md:relative">
+        <div className="fixed left-0 top-0 p-2 md:relative h-10">
           <SidebarTrigger />
         </div>
         {children}
