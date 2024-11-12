@@ -7,6 +7,8 @@ import toast from "react-hot-toast";
 import { API_URL } from "@/lib/misc/constants";
 import { useRouter } from "next/navigation";
 import { Textarea } from "../ui/textarea";
+import { addTransaction } from "@/lib/actions/transactions/transactions";
+import { checkStatus } from "@/lib/misc/statusChecker";
 
 interface Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -42,17 +44,19 @@ export default function TransactionCreationCard({ setOpen }: Props) {
       return;
     }
 
-    const res = await fetch(`${API_URL}/v1/Transaction/AddTransaction`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(transaction),
-      credentials: "include",
-    });
+    // const res = await fetch(`${API_URL}/v1/Transaction/AddTransaction`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Accept: "application/json",
+    //   },
+    //   body: JSON.stringify(transaction),
+    //   credentials: "include",
+    // });
 
-    if (res.ok) {
+    let res = await addTransaction(transaction);
+
+    if (await checkStatus(res.status)) {
       toast.success("Transaction created successfully");
       router.refresh();
       setOpen(false);
@@ -146,10 +150,7 @@ export default function TransactionCreationCard({ setOpen }: Props) {
           type="number"
           step="0.01"
           min={0}
-          onChange={(e) => {
-            console.log(e.target.value);
-            setTransaction((prev) => ({ ...prev, amount: parseFloat(e.target.value) }));
-          }}
+          onChange={(e) => setTransaction((prev) => ({ ...prev, amount: parseFloat(e.target.value) }))}
         />
       </div>
       <div className="w-full">

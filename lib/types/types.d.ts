@@ -17,6 +17,15 @@ interface Transaction {
   amount: number;
 }
 
+interface TransactionResponse {
+  id: number;
+  type: number;
+  title: string;
+  description: string;
+  amount: number;
+  tranDate: string;
+}
+
 interface ActionResult {
   status: number;
   message: string;
