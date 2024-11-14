@@ -1,17 +1,10 @@
 "use server";
 
-export async function Ok(
-  data: any = null,
-  message: string = "Success"
-): Promise<ActionResult> {
+export async function Ok(data: any = null, message: string = "Success"): Promise<ActionResult> {
   return { status: 200, message, data };
 }
 
-export async function Problem(
-  status: number,
-  message: string,
-  data: any = null
-): Promise<ActionResult> {
+export async function Problem(status: number, message: string, data: any = null): Promise<ActionResult> {
   return { status, message, data };
 }
 

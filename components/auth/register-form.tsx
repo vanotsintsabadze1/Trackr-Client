@@ -3,18 +3,17 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { API_URL } from "@/lib/misc/constants";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { register } from "@/lib/actions/auth/auth";
+import { checkStatus } from "@/lib/misc/statusChecker";
+import toast from "react-hot-toast";
+import LoadingSpinner from "../ui/loading-spinner";
+import { HttpStatusTypes } from "@/lib/misc/constants";
+import { HttpStatusCode } from "axios";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -24,24 +23,39 @@ export function RegisterForm() {
     password: "",
     confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false);
 
   async function handleRegister() {
+    setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/v1/User/Register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
+      const res = await register(data);
+      const status = checkStatus(res.status);
 
-      if (res.ok) {
+      if (status.type === HttpStatusTypes.Success) {
         router.push("/auth/login");
+        toast.success("Account created successfully! Please login to continue");
+        return;
+      }
+
+      if (status.type === HttpStatusTypes.ClientError) {
+        if (status.status === HttpStatusCode.Conflict) {
+          toast.error("User already exists");
+          return;
+        }
+        if (status.status === HttpStatusCode.BadRequest) {
+          toast.error("Invalid data");
+          return;
+        }
+      }
+
+      if (status.type === HttpStatusTypes.Internal) {
+        toast.error("Problem creating account. Please try again later");
+        return;
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -49,9 +63,7 @@ export function RegisterForm() {
     <Card className="mx-auto max-w-sm">
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
-        <CardDescription>
-          Enter your email below to login to your account
-        </CardDescription>
+        <CardDescription>Enter your email below to login to your account</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
@@ -95,14 +107,12 @@ export function RegisterForm() {
               type="password"
               placeholder="Write your password"
               name="confirmPassword"
-              onChange={(e) =>
-                setData({ ...data, confirmPassword: e.target.value })
-              }
+              onChange={(e) => setData({ ...data, confirmPassword: e.target.value })}
               required
             />
           </div>
           <Button type="submit" className="w-full" onClick={handleRegister}>
-            Register
+            {loading ? <LoadingSpinner size={20} /> : "Register"}
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">

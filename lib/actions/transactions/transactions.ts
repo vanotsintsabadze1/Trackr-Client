@@ -13,7 +13,7 @@ export async function addTransaction(transaction: Transaction) {
       },
       withCredentials: true,
     });
-    return (await checkStatus(res.status)) ? Ok(res.data) : Problem(res.status, res.statusText);
+    return checkStatus(res.status) ? Ok(res.data) : Problem(res.status, res.statusText);
   } catch (error) {
     console.error(error);
     return InternalError();
@@ -30,7 +30,7 @@ export async function getLatestTransactions(transactionCount: number) {
       withCredentials: true,
     });
 
-    return (await checkStatus(res.status)) ? Ok(res.data) : Problem(res.status, res.statusText);
+    return checkStatus(res.status) ? Ok(res.data) : Problem(res.status, res.statusText);
   } catch (error) {
     console.error(error);
     return InternalError();

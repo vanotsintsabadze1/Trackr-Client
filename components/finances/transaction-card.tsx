@@ -56,7 +56,7 @@ export default function TransactionCreationCard({ setOpen }: Props) {
 
     let res = await addTransaction(transaction);
 
-    if (await checkStatus(res.status)) {
+    if (checkStatus(res.status)) {
       toast.success("Transaction created successfully");
       router.refresh();
       setOpen(false);

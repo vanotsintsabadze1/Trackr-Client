@@ -31,3 +31,8 @@ interface ActionResult {
   message: string;
   data: any;
 }
+
+interface StatusCheckerPayload {
+  status: number;
+  type: 0 | 1 | 2;
+}

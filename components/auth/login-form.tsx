@@ -3,37 +3,68 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { API_URL } from "@/lib/misc/constants";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { checkStatus } from "@/lib/misc/statusChecker";
+import { API_URL, HttpStatusTypes } from "@/lib/misc/constants";
+import axios, { AxiosError, HttpStatusCode } from "axios";
+import LoadingSpinner from "../ui/loading-spinner";
+import toast from "react-hot-toast";
 
 export function LoginForm() {
-  const router = useRouter();
   const [data, setData] = useState<UserLoginRequest>({
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  // this is the only time we do fetch request on front-end since the cookies have to be set by the server side.
+  // we could inject cookies on our own but it is not recommended since we might screw up options like secure, httpOnly, etc.
 
   async function handleLogin() {
+    setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/v1/User/Login`, {
-        method: "POST",
+      const res = await axios.post(`${API_URL}/v1/User/Login`, data, {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify(data),
-        credentials: "include",
+        withCredentials: true,
       });
 
-      if (res.ok) {
-        router.push("/");
+      const status = checkStatus(res.status);
+
+      if (status.type === HttpStatusTypes.Success) {
+        toast.success("Login successful");
+        router.refresh();
+        return;
       }
     } catch (error) {
-      console.error(error);
+      let status = (error as AxiosError).status;
+
+      if (status === undefined) {
+        toast.error("An error occurred. Please try again");
+        return;
+      }
+      let checkedStatus = checkStatus(status);
+
+      if (checkedStatus.type === HttpStatusTypes.ClientError) {
+        if (checkedStatus.status === HttpStatusCode.Unauthorized) {
+          toast.error("Invalid email or password");
+          return;
+        }
+      }
+
+      if (checkedStatus.type === HttpStatusTypes.Internal) {
+        toast.error("An error occurred. Please try again");
+        return;
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -72,8 +103,8 @@ export function LoginForm() {
               name="password"
             />
           </div>
-          <Button type="submit" className="w-full" onClick={handleLogin}>
-            Login
+          <Button type="submit" className="w-full relative" onClick={handleLogin}>
+            {loading ? <LoadingSpinner size={20} /> : "Login"}
           </Button>
           <Button variant="outline" className="w-full">
             Login with Google
