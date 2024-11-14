@@ -1,3 +1,4 @@
+import LogOutButton from "@/components/auth/logout-button";
 import {
   Sidebar,
   SidebarProvider,
@@ -10,14 +11,11 @@ import {
   SidebarMenuButton,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Calendar, Home, Notebook, Settings, Wallet } from "lucide-react";
+import { logout } from "@/lib/actions/auth/auth";
+import { Calendar, Home, LogOut, Notebook, Settings, Wallet } from "lucide-react";
 import Link from "next/link";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const items = [
     {
       title: "Dashboard",
@@ -67,23 +65,21 @@ export default function DashboardLayout({
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}
+                  <SidebarMenuItem>
+                    <SidebarMenuButton className="hover:bg-gray-400 transition-all duration-200 ease-in-out hover:text-black">
+                      <LogOutButton />
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>
           <SidebarFooter className="text-center flex flex-col items-center gap-1">
-            <span className="text-xs font-medium text-gray-300/50">
-              Developed by Vano © 2024.
-            </span>
-            <Link
-              href="/tos"
-              className="text-[.6rem] font-medium text-gray-300/30 underline"
-            >
+            <span className="text-xs font-medium text-gray-300/50">Developed by Vano © 2024.</span>
+            <Link href="/tos" className="text-[.6rem] font-medium text-gray-300/30 underline">
               Terms of Service
             </Link>
-            <span className="text-[.6rem] font-medium text-gray-300/50 pb-5">
-              v1.0.0
-            </span>
+            <span className="text-[.6rem] font-medium text-gray-300/50 pb-5">v1.0.0</span>
           </SidebarFooter>
         </Sidebar>
         <div className="fixed left-0 top-0 p-2 md:relative h-10">
