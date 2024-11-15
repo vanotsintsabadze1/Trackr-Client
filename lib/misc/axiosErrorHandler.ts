@@ -6,7 +6,7 @@ import { HttpStatusTypes } from "./constants";
 import { InternalError, Problem } from "./genericResponses";
 
 export async function axiosErrorHandler(error: AxiosError, data?: any) {
-  if (error.response?.status) {
+  if (typeof error.response?.status !== "undefined") {
     console.error(error.response.status);
     console.error(error.response.statusText);
     console.error(error.response.data);
