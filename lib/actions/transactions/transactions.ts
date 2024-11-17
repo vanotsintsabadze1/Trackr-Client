@@ -14,7 +14,7 @@ export async function addTransaction(transaction: Transaction) {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      requireAuth: true,
+      withCredentials: true,
     });
 
     const status = checkStatus(res.status);
@@ -32,7 +32,7 @@ export async function getLatestTransactions(transactionCount: number) {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      requireAuth: true,
+      withCredentials: true,
     });
 
     const status = checkStatus(res.status);
@@ -50,7 +50,7 @@ export async function getTransaction(count: number, page: number) {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      requireAuth: true,
+      withCredentials: true,
     });
 
     const status = checkStatus(res.status);
