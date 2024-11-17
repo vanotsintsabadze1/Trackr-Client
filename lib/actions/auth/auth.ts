@@ -21,7 +21,7 @@ export async function register(user: UserRegisterRequest) {
 
     return status.type === HttpStatusTypes.Success ? Ok(res.data) : Problem(res.status, res.statusText, res.data);
   } catch (error) {
-    return axiosErrorHandler(error as AxiosError);
+    return await axiosErrorHandler(error as AxiosError);
   }
 }
 

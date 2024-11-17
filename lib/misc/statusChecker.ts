@@ -1,5 +1,3 @@
-"use client";
-
 import { HttpStatusCode } from "axios";
 import { HttpStatusTypes } from "./constants";
 

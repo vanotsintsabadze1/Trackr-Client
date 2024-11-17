@@ -13,9 +13,9 @@ export default function LogOutButton() {
   }
 
   return (
-    <button onClick={handleLogOut} className="w-full h-full flex items-center gap-2">
+    <div onClick={handleLogOut} className="w-full h-full flex items-center gap-2">
       <LogOut size={17} />
       <span>Log out</span>
-    </button>
+    </div>
   );
 }
