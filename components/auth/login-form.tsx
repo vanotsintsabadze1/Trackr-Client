@@ -13,6 +13,7 @@ import { API_URL, HttpStatusTypes } from "@/lib/misc/constants";
 import axios, { AxiosError, HttpStatusCode } from "axios";
 import LoadingSpinner from "../ui/loading-spinner";
 import toast from "react-hot-toast";
+import { login } from "@/lib/actions/auth/auth";
 
 export function LoginForm() {
   const [data, setData] = useState<UserLoginRequest>({
@@ -28,14 +29,7 @@ export function LoginForm() {
   async function handleLogin() {
     setLoading(true);
     try {
-      const res = await axios.post(`${API_URL}/v1/User/Login`, data, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        withCredentials: true,
-      });
-
+      const res = await login(data);
       const status = checkStatus(res.status);
 
       if (status.type === HttpStatusTypes.Success) {
