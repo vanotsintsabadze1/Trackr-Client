@@ -1,5 +1,4 @@
 import { getLatestTransactions } from "@/lib/actions/transactions/transactions";
-import { Button } from "../ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 
 export default async function RecentActivities() {

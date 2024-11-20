@@ -4,11 +4,12 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import toast from "react-hot-toast";
-import { API_URL } from "@/lib/misc/constants";
+import { HttpStatusTypes } from "@/lib/misc/constants";
 import { useRouter } from "next/navigation";
 import { Textarea } from "../ui/textarea";
 import { addTransaction } from "@/lib/actions/transactions/transactions";
 import { checkStatus } from "@/lib/misc/statusChecker";
+import { AxiosError, HttpStatusCode } from "axios";
 
 interface Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,22 +45,41 @@ export default function TransactionCreationCard({ setOpen }: Props) {
       return;
     }
 
-    // const res = await fetch(`${API_URL}/v1/Transaction/AddTransaction`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Accept: "application/json",
-    //   },
-    //   body: JSON.stringify(transaction),
-    //   credentials: "include",
-    // });
+    try {
+      let res = await addTransaction(transaction);
 
-    let res = await addTransaction(transaction);
+      if (res.type === HttpStatusTypes.Success) {
+        toast.success("Transaction created successfully");
+        setOpen(false);
+        router.refresh();
+      }
+    } catch (error) {
+      let status = (error as AxiosError).response?.status;
 
-    if (checkStatus(res.status)) {
-      toast.success("Transaction created successfully");
-      router.refresh();
-      setOpen(false);
+      if (status == undefined) {
+        toast.error("Unexpected error occurred");
+        return;
+      }
+
+      let response = checkStatus(status);
+
+      if (response.type === HttpStatusTypes.ClientError) {
+        switch (response.status) {
+          case HttpStatusCode.BadRequest:
+            toast.error("Invalid request");
+            break;
+          case HttpStatusCode.Unauthorized:
+            toast.error("Unauthorized");
+            break;
+          default:
+            break;
+        }
+      }
+
+      if (response.type === HttpStatusTypes.Internal) {
+        toast.error("Internal server error, contact support");
+        console.error(response.data as RequestError);
+      }
     }
   }
 

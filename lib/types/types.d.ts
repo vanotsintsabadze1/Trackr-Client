@@ -39,4 +39,13 @@ interface ActionResult {
 interface StatusCheckerPayload {
   status: number;
   type: 0 | 1 | 2;
+  data?: T | RequestError;
+}
+
+interface RequestError {
+  code: string;
+  title: string;
+  traceId: string;
+  status: number;
+  type: string;
 }
