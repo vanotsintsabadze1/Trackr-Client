@@ -30,6 +30,7 @@ export async function register(user: UserRegisterRequest) {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+      withCredentials: true,
     });
 
     const status = checkStatus<UserRegisterResponse>(res.status);
@@ -41,7 +42,7 @@ export async function register(user: UserRegisterRequest) {
 }
 
 export async function logout() {
-  cookies().delete("token");
+  cookies().delete("session");
 
   return Ok();
 }

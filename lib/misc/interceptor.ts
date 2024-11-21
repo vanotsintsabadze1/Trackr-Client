@@ -1,28 +1,29 @@
 "use server";
 
+const isServer = typeof window === "undefined";
+
+import { cookies } from "next/headers";
 import { API_URL } from "./constants";
-import axios, { InternalAxiosRequestConfig } from "axios";
-import { cookies, headers } from "next/headers";
+import axios from "axios";
 
-const token = cookies().get("token")?.value;
-
-declare module "axios" {
-  interface AxiosRequestConfig {
-    requireAuth?: boolean;
+function cookieInterceptor(req: any) {
+  if (isServer) {
+    const cookieString = cookies()
+      .getAll()
+      .map((cookie) => `${cookie.name}=${cookie.value}`)
+      .join("; ");
+    req.headers.cookie = cookieString;
   }
-}
 
-interface CustomInterceptorConfig extends InternalAxiosRequestConfig {
-  requireAuth?: boolean;
+  return req;
 }
 
 export const AxiosService = axios.create({
   baseURL: API_URL,
 });
 
-AxiosService.interceptors.request.use((config: CustomInterceptorConfig) => {
-  if (config.requireAuth && token) {
-    config.headers.set("Authorization", `Bearer ${token}`);
-  }
-  return config;
+AxiosService.interceptors.request.use(cookieInterceptor);
+
+AxiosService.interceptors.response.use((res) => {
+  return res;
 });

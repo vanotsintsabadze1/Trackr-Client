@@ -22,10 +22,6 @@ interface Transaction {
   amount: number;
 }
 
-interface CustomInterceptorConfig extends InternalAxiosRequestConfig {
-  requireAuth?: boolean;
-}
-
 interface TransactionResponse {
   id: number;
   type: number;
