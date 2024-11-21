@@ -1,8 +1,6 @@
 "use server";
 
 import { axiosErrorHandler } from "@/lib/misc/axiosErrorHandler";
-import { HttpStatusTypes } from "@/lib/misc/constants";
-import { Ok, Problem } from "@/lib/misc/genericResponses";
 import { AxiosService } from "@/lib/misc/interceptor";
 import { checkStatus } from "@/lib/misc/statusChecker";
 import { AxiosError } from "axios";
@@ -17,9 +15,9 @@ export async function addTransaction(transaction: Transaction) {
       withCredentials: true,
     });
 
-    const status = checkStatus(res.status);
+    const status = checkStatus<TransactionResponse>(res.status, res.data);
 
-    return status.type === HttpStatusTypes.Success ? Ok(res.data) : Problem(res.status, res.statusText);
+    return status;
   } catch (error) {
     return await axiosErrorHandler(error as AxiosError);
   }
@@ -35,9 +33,9 @@ export async function getLatestTransactions(transactionCount: number) {
       withCredentials: true,
     });
 
-    const status = checkStatus(res.status);
+    const status = checkStatus<TransactionResponse[]>(res.status, res.data);
 
-    return status.type === HttpStatusTypes.Success ? Ok(res.data) : Problem(res.status, res.statusText);
+    return status;
   } catch (error) {
     return await axiosErrorHandler(error as AxiosError);
   }
@@ -53,9 +51,9 @@ export async function getTransaction(count: number, page: number) {
       withCredentials: true,
     });
 
-    const status = checkStatus(res.status);
+    const status = checkStatus<TransactionResponse[]>(res.status, res.data);
 
-    return status.type === HttpStatusTypes.Success ? Ok(res.data) : Problem(res.status, res.statusText);
+    return status;
   } catch (error) {
     return await axiosErrorHandler(error as AxiosError);
   }

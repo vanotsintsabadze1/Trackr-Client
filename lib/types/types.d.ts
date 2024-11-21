@@ -10,6 +10,11 @@ interface UserRegisterRequest {
   confirmPassword: string;
 }
 
+interface UserRegisterResponse {
+  name: string;
+  email: string;
+}
+
 interface Transaction {
   type: number;
   title: string;
@@ -35,4 +40,13 @@ interface ActionResult {
 interface StatusCheckerPayload {
   status: number;
   type: 0 | 1 | 2;
+  data?: T | RequestError;
+}
+
+interface RequestError {
+  code: string;
+  title: string;
+  traceId: string;
+  status: number;
+  type: string;
 }

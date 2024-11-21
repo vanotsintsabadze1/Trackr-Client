@@ -9,10 +9,11 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { checkStatus } from "@/lib/misc/statusChecker";
-import { API_URL, HttpStatusTypes } from "@/lib/misc/constants";
-import axios, { AxiosError, HttpStatusCode } from "axios";
+import { HttpStatusTypes } from "@/lib/misc/constants";
+import { AxiosError, HttpStatusCode } from "axios";
 import LoadingSpinner from "../ui/loading-spinner";
 import toast from "react-hot-toast";
+import { login } from "@/lib/actions/auth/auth";
 
 export function LoginForm() {
   const [data, setData] = useState<UserLoginRequest>({
@@ -22,23 +23,12 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // this is the only time we do fetch request on front-end since the cookies have to be set by the server side.
-  // we could inject cookies on our own but it is not recommended since we might screw up options like secure, httpOnly, etc.
-
   async function handleLogin() {
     setLoading(true);
     try {
-      const res = await axios.post(`${API_URL}/v1/User/Login`, data, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        withCredentials: true,
-      });
+      const res = await login(data);
 
-      const status = checkStatus(res.status);
-
-      if (status.type === HttpStatusTypes.Success) {
+      if (res.type === HttpStatusTypes.Success) {
         toast.success("Login successful");
         router.refresh();
         return;
@@ -50,7 +40,8 @@ export function LoginForm() {
         toast.error("An error occurred. Please try again");
         return;
       }
-      let checkedStatus = checkStatus(status);
+
+      let checkedStatus = checkStatus(status, data);
 
       if (checkedStatus.type === HttpStatusTypes.ClientError) {
         if (checkedStatus.status === HttpStatusCode.Unauthorized) {

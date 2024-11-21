@@ -13,7 +13,7 @@ import { checkStatus } from "@/lib/misc/statusChecker";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../ui/loading-spinner";
 import { HttpStatusTypes } from "@/lib/misc/constants";
-import { HttpStatusCode } from "axios";
+import { AxiosError, HttpStatusCode } from "axios";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -29,31 +29,33 @@ export function RegisterForm() {
     setLoading(true);
     try {
       const res = await register(data);
-      const status = checkStatus(res.status);
 
-      if (status.type === HttpStatusTypes.Success) {
+      if (res.type === HttpStatusTypes.Success) {
         router.push("/auth/login");
         toast.success("Account created successfully! Please login to continue");
         return;
       }
+    } catch (error) {
+      const status = (error as AxiosError).response?.status;
 
-      if (status.type === HttpStatusTypes.ClientError) {
-        if (status.status === HttpStatusCode.Conflict) {
-          toast.error("User already exists");
-          return;
-        }
-        if (status.status === HttpStatusCode.BadRequest) {
-          toast.error("Invalid data");
-          return;
-        }
-      }
-
-      if (status.type === HttpStatusTypes.Internal) {
-        toast.error("Problem creating account. Please try again later");
+      if (!status) {
+        toast.error("Unexpected error occurred. Please contact support");
         return;
       }
-    } catch (error) {
-      console.error(error);
+
+      const response = checkStatus(status);
+
+      if (response.type === HttpStatusTypes.ClientError) {
+        if (response.status === HttpStatusCode.BadRequest) {
+          toast.error("Invalid request. Please check your data and try again");
+          return;
+        }
+
+        if (response.status === HttpStatusCode.Conflict) {
+          toast.error("User already exists with given credentials");
+          return;
+        }
+      }
     } finally {
       setLoading(false);
     }
