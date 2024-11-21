@@ -32,7 +32,7 @@ export async function register(user: UserRegisterRequest) {
       },
     });
 
-    const status = checkStatus(res.status);
+    const status = checkStatus<UserRegisterResponse>(res.status);
 
     return status;
   } catch (error) {

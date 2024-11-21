@@ -10,6 +10,11 @@ interface UserRegisterRequest {
   confirmPassword: string;
 }
 
+interface UserRegisterResponse {
+  name: string;
+  email: string;
+}
+
 interface Transaction {
   type: number;
   title: string;
