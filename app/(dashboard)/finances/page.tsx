@@ -8,7 +8,7 @@ export default async function page() {
   return (
     <div className="flex-grow min-h-dvh flex justify-center py-10 flex-wrap gap-y-6">
       <FinanceTrackerWrapper />
-      {transactions ? <FinancesTable transactions={transactions.data} /> : <p>Loading..</p>}
+      <FinancesTable transactions={transactions.data} />
     </div>
   );
 }
