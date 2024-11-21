@@ -11,15 +11,13 @@ import { cookies } from "next/headers";
 export async function login(user: UserLoginRequest) {
   try {
     const res = await AxiosService.post("v1/User/Login", user);
-    const status = checkStatus(res.status);
+    const status = checkStatus<string>(res.status);
 
     if (status.type === HttpStatusTypes.Success) {
       cookies().set("token", res.data);
     }
 
-    console.log("something", res.data);
-
-    return status.type === HttpStatusTypes.Success ? Ok(res.data) : Problem(res.status, res.statusText, res.data);
+    return status;
   } catch (error) {
     return await axiosErrorHandler(error as AxiosError);
   }

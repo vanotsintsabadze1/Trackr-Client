@@ -29,9 +29,8 @@ export function RegisterForm() {
     setLoading(true);
     try {
       const res = await register(data);
-      const status = checkStatus(res.status);
 
-      if (status.type === HttpStatusTypes.Success) {
+      if (res.type === HttpStatusTypes.Success) {
         router.push("/auth/login");
         toast.success("Account created successfully! Please login to continue");
         return;

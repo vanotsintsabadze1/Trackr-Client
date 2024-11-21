@@ -27,9 +27,8 @@ export function LoginForm() {
     setLoading(true);
     try {
       const res = await login(data);
-      const status = checkStatus(res.status);
 
-      if (status.type === HttpStatusTypes.Success) {
+      if (res.type === HttpStatusTypes.Success) {
         toast.success("Login successful");
         router.refresh();
         return;
