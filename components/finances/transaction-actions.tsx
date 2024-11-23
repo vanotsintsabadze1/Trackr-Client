@@ -8,6 +8,7 @@ import { HttpStatusTypes } from "@/lib/misc/constants";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { HttpStatusCode } from "axios";
+import TransactionEditModal from "./transaction-edit-modal";
 
 interface Props {
   transaction: TransactionResponse;
@@ -15,6 +16,7 @@ interface Props {
 
 export default function TransactionActions({ transaction }: Props) {
   const [confirmationModal, setConfirmationModalOpen] = useState(false);
+  const [editModal, setEditModalOpen] = useState(false);
   const router = useRouter();
 
   async function handleDelete() {
@@ -45,10 +47,12 @@ export default function TransactionActions({ transaction }: Props) {
       return;
     }
   }
+
   return (
     <>
       <ConfirmationModal callback={handleDelete} open={confirmationModal} setOpen={setConfirmationModalOpen} />
-      <button className="hover:scale-105 duration-150 ease-in-out">
+      <TransactionEditModal transaction={transaction} open={editModal} setOpen={setEditModalOpen} />
+      <button className="hover:scale-105 duration-150 ease-in-out" onClick={() => setEditModalOpen(true)}>
         <Edit size={17} />
       </button>
       <button

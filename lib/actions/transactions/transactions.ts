@@ -76,3 +76,21 @@ export async function deleteTransaction<T = TransactionResponse>(transactionId: 
     return await axiosErrorHandler(error as AxiosError);
   }
 }
+
+export async function editTransaction<T = TransactionResponse>(transaction: TransactionResponse): Promise<StatusCheckerPayload<T | RequestError>> {
+  try {
+    const res = await AxiosService.put(`/v1/Transaction/EditTransaction/${transaction.id}`, transaction, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      requiresAuth: true,
+    });
+
+    const status = checkStatus<T>(res.status, res.data);
+
+    return status;
+  } catch (error) {
+    return await axiosErrorHandler(error as AxiosError);
+  }
+}
