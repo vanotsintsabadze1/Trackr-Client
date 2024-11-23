@@ -1,6 +1,6 @@
 "use client";
 
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card";
@@ -21,7 +21,7 @@ export default function ConfirmationModal({ callback, setOpen, open }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="fixed left-0 top-0 w-dvw h-dvh bg-black/50 flex items-center justify-center text-xs">
+      <DialogContent className="w-dvw h-dvh bg-transparent flex items-center justify-center text-xs border-none">
         <VisuallyHidden>
           <DialogTitle>Are you sure you want to delete this transaction?</DialogTitle>
           <DialogDescription>This action cannot be undone.</DialogDescription>
