@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import TransactionInformationModal from "./transaction-information-modal";
+import TransactionActions from "./transaction-actions";
 
 interface Props {
-  transactions: TransactionResponse[];
+  transactions: TransactionResponse[] | RequestError;
 }
 
 export default function FinancesTable({ transactions }: Props) {
@@ -24,10 +25,17 @@ export default function FinancesTable({ transactions }: Props) {
                   <th className="py-3 px-6 text-left">Type</th>
                   <th className="py-3 px-6 text-left">Title</th>
                   <th className="py-3 px-6 text-left">Date</th>
+                  <th className="py-3 px-6 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody className="text-gray-600 text-sm font-medium">
-                {transactions ? (
+                {"code" in transactions ? (
+                  <tr className={`border-b border-gray-200 cursor-pointer hover:bg-gray-100 bg-white`}>
+                    <td colSpan={5} className="py-3 px-6 text-center">
+                      <span>Loading</span>
+                    </td>
+                  </tr>
+                ) : (
                   transactions.map((transaction, index) => (
                     <tr
                       key={transaction.id}
@@ -35,9 +43,7 @@ export default function FinancesTable({ transactions }: Props) {
                         setSelectedTransaction(index);
                         setTransactionModal(true);
                       }}
-                      className={`border-b border-gray-200 cursor-pointer hover:bg-gray-100 ${
-                        index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                      }`}
+                      className={`border-b border-gray-200 cursor-pointer hover:bg-gray-100 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}
                     >
                       <td className="py-3 px-6 text-left whitespace-nowrap">
                         <span className="font-medium truncate w-10">{transaction.id}</span>
@@ -70,14 +76,13 @@ export default function FinancesTable({ transactions }: Props) {
                       <td className="py-3 px-6 text-left whitespace-nowrap">
                         <span>{new Date(transaction.tranDate).toLocaleDateString()}</span>
                       </td>
+                      <td className="py-3 px-6 text-left whitespace-nowrap">
+                        <div onClick={(e) => e.stopPropagation()} className="flex gap-x-2.5 items-center justify-center w-full">
+                          <TransactionActions transaction={transaction} />
+                        </div>
+                      </td>
                     </tr>
                   ))
-                ) : (
-                  <tr className={`border-b border-gray-200 cursor-pointer hover:bg-gray-100 bg-white`}>
-                    <td colSpan={5} className="py-3 px-6 text-center">
-                      <span>Loading</span>
-                    </td>
-                  </tr>
                 )}
               </tbody>
             </table>
@@ -85,13 +90,7 @@ export default function FinancesTable({ transactions }: Props) {
         </div>
       </div>
 
-      {transactionModal && (
-        <TransactionInformationModal
-          setTransactionModal={setTransactionModal}
-          transactionModal={transactionModal}
-          transaction={transactions[selectedTransaction]}
-        />
-      )}
+      {Array.isArray(transactions) && <TransactionInformationModal setTransactionModal={setTransactionModal} transactionModal={transactionModal} transaction={transactions[selectedTransaction]} />}
     </>
   );
 }

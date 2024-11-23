@@ -1,18 +1,6 @@
 import LogOutButton from "@/components/auth/logout-button";
-import {
-  Sidebar,
-  SidebarProvider,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { logout } from "@/lib/actions/auth/auth";
-import { Calendar, Home, LogOut, Notebook, Settings, Wallet } from "lucide-react";
+import { Sidebar, SidebarProvider, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger } from "@/components/ui/sidebar";
+import { Calendar, Home, Notebook, Settings, Wallet } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -54,10 +42,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <SidebarMenu className="text-white gap-4 font-medium">
                   {items.map((item) => (
                     <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton
-                        asChild
-                        className="hover:bg-gray-400 transition-all duration-200 ease-in-out hover:text-black"
-                      >
+                      <SidebarMenuButton asChild className="hover:bg-gray-400 transition-all duration-200 ease-in-out hover:text-black">
                         <Link href={item.url} className="w-full h-full flex">
                           <item.icon />
                           <span>{item.title}</span>

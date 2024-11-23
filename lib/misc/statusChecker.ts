@@ -1,7 +1,7 @@
 import { HttpStatusCode } from "axios";
 import { HttpStatusTypes } from "./constants";
 
-export function checkStatus<T>(status: number, data?: T | RequestError): StatusCheckerPayload {
+export function checkStatus<T>(status: number, data: T | RequestError): StatusCheckerPayload<T | RequestError> {
   if (status >= 200 && status < 300) {
     return { status: status, type: HttpStatusTypes.Success, data: data as T };
   }

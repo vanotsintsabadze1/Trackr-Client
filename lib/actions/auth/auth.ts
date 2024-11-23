@@ -2,7 +2,7 @@
 
 import { axiosErrorHandler } from "@/lib/misc/axiosErrorHandler";
 import { HttpStatusTypes } from "@/lib/misc/constants";
-import { Ok, Problem } from "@/lib/misc/genericResponses";
+import { Ok } from "@/lib/misc/genericResponses";
 import { AxiosService } from "@/lib/misc/interceptor";
 import { checkStatus } from "@/lib/misc/statusChecker";
 import { AxiosError } from "axios";
@@ -11,7 +11,7 @@ import { cookies } from "next/headers";
 export async function login(user: UserLoginRequest) {
   try {
     const res = await AxiosService.post("v1/User/Login", user);
-    const status = checkStatus<string>(res.status);
+    const status = checkStatus<string>(res.status, res.data);
 
     if (status.type === HttpStatusTypes.Success) {
       cookies().set("token", res.data);
@@ -33,7 +33,7 @@ export async function register(user: UserRegisterRequest) {
       withCredentials: true,
     });
 
-    const status = checkStatus<UserRegisterResponse>(res.status);
+    const status = checkStatus<UserRegisterResponse>(res.status, res.data);
 
     return status;
   } catch (error) {

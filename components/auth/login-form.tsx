@@ -25,38 +25,28 @@ export function LoginForm() {
 
   async function handleLogin() {
     setLoading(true);
-    try {
-      const res = await login(data);
+    const res = await login(data);
 
-      if (res.type === HttpStatusTypes.Success) {
-        toast.success("Login successful");
-        router.refresh();
-        return;
-      }
-    } catch (error) {
-      let status = (error as AxiosError).status;
-
-      if (status === undefined) {
-        toast.error("An error occurred. Please try again");
-        return;
-      }
-
-      let checkedStatus = checkStatus(status, data);
-
-      if (checkedStatus.type === HttpStatusTypes.ClientError) {
-        if (checkedStatus.status === HttpStatusCode.Unauthorized) {
-          toast.error("Invalid email or password");
-          return;
-        }
-      }
-
-      if (checkedStatus.type === HttpStatusTypes.Internal) {
-        toast.error("An error occurred. Please try again");
-        return;
-      }
-    } finally {
-      setLoading(false);
+    if (res.type === HttpStatusTypes.Success) {
+      toast.success("Login successful");
+      router.refresh();
+      return;
     }
+
+    if (res.type === HttpStatusTypes.ClientError) {
+      if (res.status === HttpStatusCode.Unauthorized) {
+        toast.error("Invalid email or password");
+        return;
+      }
+
+      toast.error("An error occured while logging in");
+    }
+
+    if (res.type === HttpStatusTypes.Internal) {
+      toast.error("Unexpected error occured, contact support");
+      return;
+    }
+    setLoading(false);
   }
 
   return (
@@ -69,14 +59,7 @@ export function LoginForm() {
         <div className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              name="email"
-              onChange={(e) => setData({ ...data, email: e.target.value })}
-              required
-            />
+            <Input id="email" type="email" placeholder="m@example.com" name="email" onChange={(e) => setData({ ...data, email: e.target.value })} required />
           </div>
           <div className="grid gap-2">
             <div className="flex items-center">
@@ -85,14 +68,7 @@ export function LoginForm() {
                 Forgot your password?
               </Link>
             </div>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Write your password"
-              required
-              onChange={(e) => setData({ ...data, password: e.target.value })}
-              name="password"
-            />
+            <Input id="password" type="password" placeholder="Write your password" required onChange={(e) => setData({ ...data, password: e.target.value })} name="password" />
           </div>
           <Button type="submit" className="w-full relative" onClick={handleLogin}>
             {loading ? <LoadingSpinner size={20} /> : "Login"}

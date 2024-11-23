@@ -37,10 +37,10 @@ interface ActionResult {
   data: any;
 }
 
-interface StatusCheckerPayload {
+interface StatusCheckerPayload<T> {
   status: number;
   type: 0 | 1 | 2;
-  data?: T | RequestError;
+  data: T | RequestError;
 }
 
 interface RequestError {
