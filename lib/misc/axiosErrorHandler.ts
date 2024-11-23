@@ -3,9 +3,8 @@
 import { AxiosError } from "axios";
 import { checkStatus } from "./statusChecker";
 import { HttpStatusTypes } from "./constants";
-import { InternalError, Problem } from "./genericResponses";
 
-export async function axiosErrorHandler(error: AxiosError, data?: any) {
+export async function axiosErrorHandler(error: AxiosError) {
   if (typeof error.response?.status !== "undefined") {
     console.error(error.response.status);
     console.error(error.response.statusText);
@@ -17,9 +16,10 @@ export async function axiosErrorHandler(error: AxiosError, data?: any) {
   }
 
   if (typeof error.response?.status === "number") {
-    const statusPayload = checkStatus(error.response.status);
+    const statusPayload = checkStatus<RequestError>(error.response.status, error.response.data as RequestError);
     return statusPayload;
   }
+
   return {
     status: 500,
     type: HttpStatusTypes.Internal,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Input } from "../ui/input";
@@ -8,8 +8,7 @@ import { HttpStatusTypes } from "@/lib/misc/constants";
 import { useRouter } from "next/navigation";
 import { Textarea } from "../ui/textarea";
 import { addTransaction } from "@/lib/actions/transactions/transactions";
-import { checkStatus } from "@/lib/misc/statusChecker";
-import { AxiosError, HttpStatusCode } from "axios";
+import { HttpStatusCode } from "axios";
 
 interface Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,41 +44,31 @@ export default function TransactionCreationCard({ setOpen }: Props) {
       return;
     }
 
-    try {
-      let res = await addTransaction(transaction);
+    const res = await addTransaction(transaction);
 
-      if (res.type === HttpStatusTypes.Success) {
-        toast.success("Transaction created successfully");
-        setOpen(false);
-        router.refresh();
-      }
-    } catch (error) {
-      let status = (error as AxiosError).response?.status;
+    if (res.type === HttpStatusTypes.Success) {
+      toast.success("Transaction created successfully");
+      setOpen(false);
+      router.refresh();
+    }
 
-      if (status == undefined) {
-        toast.error("Unexpected error occurred");
+    if (res.type === HttpStatusTypes.ClientError) {
+      if (res.status === HttpStatusCode.Unauthorized) {
+        toast.error("You are not authorized to create a transaction");
         return;
       }
 
-      let response = checkStatus(status);
-
-      if (response.type === HttpStatusTypes.ClientError) {
-        switch (response.status) {
-          case HttpStatusCode.BadRequest:
-            toast.error("Invalid request");
-            break;
-          case HttpStatusCode.Unauthorized:
-            toast.error("Unauthorized");
-            break;
-          default:
-            break;
-        }
+      if (res.status === HttpStatusCode.BadRequest) {
+        toast.error("Invalid transaction data");
+        return;
       }
 
-      if (response.type === HttpStatusTypes.Internal) {
-        toast.error("Internal server error, contact support");
-        console.error(response.data as RequestError);
-      }
+      toast.error("An error occured while creating transaction");
+    }
+
+    if (res.type === HttpStatusTypes.Internal) {
+      toast.error("Unexpected error occured, contact support");
+      return;
     }
   }
 
@@ -89,59 +78,29 @@ export default function TransactionCreationCard({ setOpen }: Props) {
         <Label className="text-xs">Type</Label>
         <Select onValueChange={(v) => setTransaction((prev) => ({ ...prev, type: parseInt(v) }))}>
           <SelectTrigger className="w-full text-left px-2 h-10 border border-gray-200 rounded-lg text-xs">
-            <SelectValue placeholder="Select a Type">
-              {transaction.type !== -1 ? textValues[transaction.type as keyof typeof textValues] : "Select a Type"}
-            </SelectValue>
+            <SelectValue placeholder="Select a Type">{transaction.type !== -1 ? textValues[transaction.type as keyof typeof textValues] : "Select a Type"}</SelectValue>
           </SelectTrigger>
           <SelectContent className="bg-white rounded-lg p-2 border-gray-300 border text-xs">
             <SelectGroup className="flex flex-col gap-2.5 overflow-y-auto">
-              <SelectItem
-                value="0"
-                textValue="Appliances"
-                className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out"
-              >
+              <SelectItem value="0" textValue="Appliances" className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out">
                 Appliances
               </SelectItem>
-              <SelectItem
-                value="1"
-                textValue="Tax"
-                className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out"
-              >
+              <SelectItem value="1" textValue="Tax" className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out">
                 Tax
               </SelectItem>
-              <SelectItem
-                value="2"
-                textValue="Outside"
-                className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out"
-              >
+              <SelectItem value="2" textValue="Outside" className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out">
                 Outside
               </SelectItem>
-              <SelectItem
-                value="3"
-                textValue="Rent"
-                className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out"
-              >
+              <SelectItem value="3" textValue="Rent" className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out">
                 Rent
               </SelectItem>
-              <SelectItem
-                value="4"
-                textValue="Health"
-                className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out"
-              >
+              <SelectItem value="4" textValue="Health" className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out">
                 Health
               </SelectItem>
-              <SelectItem
-                value="5"
-                textValue="Food"
-                className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out"
-              >
+              <SelectItem value="5" textValue="Food" className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out">
                 Food
               </SelectItem>
-              <SelectItem
-                value="6"
-                textValue="Other"
-                className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out"
-              >
+              <SelectItem value="6" textValue="Other" className="hover:bg-black hover:text-white p-1 cursor-pointer font-medium rounded-md duration-150 ease-in-out">
                 Other
               </SelectItem>
             </SelectGroup>
@@ -149,29 +108,16 @@ export default function TransactionCreationCard({ setOpen }: Props) {
         </Select>
         <div className="flex gap-2 flex-col">
           <Label className="text-xs">Title</Label>
-          <Input
-            placeholder="Enter title"
-            onChange={(e) => setTransaction((prev) => ({ ...prev, title: e.target.value }))}
-          />
+          <Input placeholder="Enter title" onChange={(e) => setTransaction((prev) => ({ ...prev, title: e.target.value }))} />
         </div>
       </div>
       <div className="flex gap-2 flex-col">
         <Label className="text-xs">Description</Label>
-        <Textarea
-          className="resize-none"
-          placeholder="Enter description"
-          onChange={(e) => setTransaction((prev) => ({ ...prev, description: e.target.value }))}
-        />
+        <Textarea className="resize-none" placeholder="Enter description" onChange={(e) => setTransaction((prev) => ({ ...prev, description: e.target.value }))} />
       </div>
       <div className="flex gap-2 flex-col">
         <Label className="text-xs">Amount</Label>
-        <Input
-          placeholder="Enter amount"
-          type="number"
-          step="0.01"
-          min={0}
-          onChange={(e) => setTransaction((prev) => ({ ...prev, amount: parseFloat(e.target.value) }))}
-        />
+        <Input placeholder="Enter amount" type="number" step="0.01" min={0} onChange={(e) => setTransaction((prev) => ({ ...prev, amount: parseFloat(e.target.value) }))} />
       </div>
       <div className="w-full">
         <Button className="w-full" onClick={async () => await handleTransactionCreation()}>

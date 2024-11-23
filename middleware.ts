@@ -7,7 +7,7 @@ async function redirect(request: NextRequest, url: string) {
 
 async function checkAuth() {
   const cookieStore = cookies();
-  const auth = cookieStore.get("session");
+  const auth = cookieStore.get("token");
 
   if (auth?.value) {
     return true;
@@ -32,7 +32,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)"],
 };
