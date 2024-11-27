@@ -30,13 +30,11 @@ export function LoginForm() {
     if (res.type === HttpStatusTypes.Success) {
       toast.success("Login successful");
       router.refresh();
-      return;
     }
 
     if (res.type === HttpStatusTypes.ClientError) {
       if (res.status === HttpStatusCode.Unauthorized) {
         toast.error("Invalid email or password");
-        return;
       }
 
       toast.error("An error occured while logging in");
@@ -44,7 +42,6 @@ export function LoginForm() {
 
     if (res.type === HttpStatusTypes.Internal) {
       toast.error("Unexpected error occured, contact support");
-      return;
     }
     setLoading(false);
   }
