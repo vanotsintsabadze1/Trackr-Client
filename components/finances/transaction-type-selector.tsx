@@ -20,7 +20,7 @@ export default function TransactionTypeSelector({ setTransaction, transaction }:
   return (
     <div className="flex gap-2 flex-col relative w-full">
       <Label className="text-xs">Type</Label>
-      <Select value={transaction.type !== -1 ? textValues[transaction.type as keyof typeof textValues] : "default"} onValueChange={(v) => setTransaction((prev) => ({ ...prev, type: parseInt(v) }))}>
+      <Select onValueChange={(v) => setTransaction((prev) => ({ ...prev, type: parseInt(v) }))}>
         <SelectTrigger className="w-full text-left px-2 h-10 border border-gray-200 rounded-lg text-xs">
           <SelectValue placeholder="Select a Type">{transaction.type !== -1 ? textValues[transaction.type as keyof typeof textValues] : "Select a Type"}</SelectValue>
         </SelectTrigger>

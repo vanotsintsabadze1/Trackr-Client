@@ -50,3 +50,8 @@ interface RequestError {
   status: number;
   type: string;
 }
+
+interface MoneySpentPayload {
+  moneySpent: number;
+  costLimit: number;
+}
