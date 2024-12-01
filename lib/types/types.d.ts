@@ -13,6 +13,7 @@ interface UserRegisterRequest {
 interface UserRegisterResponse {
   name: string;
   email: string;
+  costLimit: number;
 }
 
 interface Transaction {

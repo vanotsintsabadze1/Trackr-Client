@@ -30,8 +30,6 @@ export default function BudgetLimitTracker({ spent, limit }: Props) {
     setOpen(true);
   }
 
-  console.log(modalOpen);
-
   return (
     <>
       {modalOpen && <BudgetLimitChangingModal initLimit={limit} setOpen={setOpen} open={modalOpen} />}
@@ -55,9 +53,9 @@ export default function BudgetLimitTracker({ spent, limit }: Props) {
                   content={({ viewBox }) => {
                     if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                       return (
-                        <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-                          <tspan x={viewBox.cx} y={viewBox.cy! - 20} className="text-4xl font-bold">
-                            ${spent}
+                        <text x={viewBox.cx!} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
+                          <tspan x={viewBox.cx!} y={viewBox.cy! - 20} className="text-2xl font-bold truncate">
+                            ${spent.toFixed(2)}
                           </tspan>
                           <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 10} className="fill-text-sm">
                             spent of ${limit}

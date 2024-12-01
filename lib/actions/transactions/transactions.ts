@@ -112,3 +112,25 @@ export async function getMoneySpent<T = MoneySpentPayload>(): Promise<StatusChec
     return await axiosErrorHandler(error as AxiosError);
   }
 }
+
+export async function updateCostLimit<T = UserRegisterResponse>(costLimit: number): Promise<StatusCheckerPayload<T | RequestError>> {
+  try {
+    const res = await AxiosService.patch(
+      "/v1/User/UpdateCostLimit",
+      { costLimit },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        requiresAuth: true,
+      }
+    );
+
+    const status = checkStatus<T>(res.status, res.data);
+
+    return status;
+  } catch (error) {
+    return await axiosErrorHandler(error as AxiosError);
+  }
+}

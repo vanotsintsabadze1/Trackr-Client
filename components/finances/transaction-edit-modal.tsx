@@ -29,9 +29,9 @@ export default function TransactionEditModal({ transaction: initTransaction, set
     const res = await editTransaction(transaction);
 
     if (res.type === HttpStatusTypes.Success) {
+      router.refresh();
       toast.success("Transaction updated successfully");
       setOpen(false);
-      router.refresh();
     }
 
     if (res.type === HttpStatusTypes.ClientError) {

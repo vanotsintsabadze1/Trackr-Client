@@ -9,6 +9,8 @@ interface Props {
 }
 
 export default function TransactionForm({ setTransaction, transaction }: Props) {
+  console.log(transaction.type);
+
   return (
     <>
       <TransactionTypeSelector setTransaction={setTransaction} transaction={transaction} />
