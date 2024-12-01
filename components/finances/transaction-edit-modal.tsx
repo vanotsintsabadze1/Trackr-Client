@@ -2,7 +2,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Dialog } from "../ui/dialog";
 import { DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import TransactionForm from "./transaction-form";
 import { editTransaction } from "@/lib/actions/transactions/transactions";
@@ -21,13 +21,17 @@ export default function TransactionEditModal({ transaction: initTransaction, set
   const [transaction, setTransaction] = useState(initTransaction);
   const router = useRouter();
 
+  useEffect(() => {
+    console.log(transaction.type);
+  }, [transaction]);
+
   async function handleEdit() {
     const res = await editTransaction(transaction);
 
     if (res.type === HttpStatusTypes.Success) {
+      router.refresh();
       toast.success("Transaction updated successfully");
       setOpen(false);
-      router.refresh();
     }
 
     if (res.type === HttpStatusTypes.ClientError) {

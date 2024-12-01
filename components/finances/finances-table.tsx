@@ -29,6 +29,13 @@ export default function FinancesTable({ transactions }: Props) {
                 </tr>
               </thead>
               <tbody className="text-gray-600 text-sm font-medium">
+                {Array.isArray(transactions) && transactions.length === 0 && !("code" in transactions) && (
+                  <tr className={`border-b border-gray-200 cursor-pointer hover:bg-gray-100 bg-white`}>
+                    <td colSpan={6} className="py-3 px-6 text-center">
+                      <span>Nothing to show</span>
+                    </td>
+                  </tr>
+                )}
                 {"code" in transactions ? (
                   <tr className={`border-b border-gray-200 cursor-pointer hover:bg-gray-100 bg-white`}>
                     <td colSpan={5} className="py-3 px-6 text-center">
@@ -45,8 +52,8 @@ export default function FinancesTable({ transactions }: Props) {
                       }}
                       className={`border-b border-gray-200 cursor-pointer hover:bg-gray-100 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}
                     >
-                      <td className="py-3 px-6 text-left whitespace-nowrap">
-                        <span className="font-medium truncate w-10">{transaction.id}</span>
+                      <td className="py-3 px-6 text-left whitespace-nowrap overflow-hidden">
+                        <span className="font-medium w-24 block overflow-hidden text-ellipsis">{transaction.id}</span>
                       </td>
                       <td className="py-3 px-6 text-right whitespace-nowrap">
                         <span className="text-green-600">${transaction.amount.toFixed(2)}</span>
@@ -90,7 +97,9 @@ export default function FinancesTable({ transactions }: Props) {
         </div>
       </div>
 
-      {Array.isArray(transactions) && <TransactionInformationModal setTransactionModal={setTransactionModal} transactionModal={transactionModal} transaction={transactions[selectedTransaction]} />}
+      {!("code" in transactions) && transactionModal && (
+        <TransactionInformationModal setTransactionModal={setTransactionModal} transactionModal={transactionModal} transaction={transactions[selectedTransaction]} />
+      )}
     </>
   );
 }

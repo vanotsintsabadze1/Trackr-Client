@@ -13,6 +13,7 @@ interface UserRegisterRequest {
 interface UserRegisterResponse {
   name: string;
   email: string;
+  costLimit: number;
 }
 
 interface Transaction {
@@ -49,4 +50,9 @@ interface RequestError {
   traceId: string;
   status: number;
   type: string;
+}
+
+interface MoneySpentPayload {
+  moneySpent: number;
+  costLimit: number;
 }
