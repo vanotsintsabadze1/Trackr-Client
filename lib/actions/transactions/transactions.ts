@@ -134,3 +134,61 @@ export async function updateCostLimit<T = UserRegisterResponse>(costLimit: numbe
     return await axiosErrorHandler(error as AxiosError);
   }
 }
+
+export async function getPreviousAndCurrentMonthExpenses<T = PreviousAndCurrentMonthExpenses>(): Promise<StatusCheckerPayload<T | RequestError>> {
+  try {
+    const res = await AxiosService.get("/v1/Transaction/GetPreviousAndCurrentMonthExpenses", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      requiresAuth: true,
+    });
+
+    const status = checkStatus<T>(res.status, res.data);
+
+    return status;
+  } catch (error) {
+    return await axiosErrorHandler(error as AxiosError);
+  }
+}
+
+export async function getBalance<T = BalancePayload>(): Promise<StatusCheckerPayload<T | RequestError>> {
+  try {
+    const res = await AxiosService.get("/v1/User/GetBalance", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      requiresAuth: true,
+    });
+
+    const status = checkStatus<T>(res.status, res.data);
+
+    return status;
+  } catch (error) {
+    return await axiosErrorHandler(error as AxiosError);
+  }
+}
+
+export async function updateBalance<T = UserRegisterResponse>(balance: number): Promise<StatusCheckerPayload<T | RequestError>> {
+  try {
+    const res = await AxiosService.patch(
+      "/v1/User/UpdateBalance",
+      { balance },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        requiresAuth: true,
+      }
+    );
+
+    const status = checkStatus<T>(res.status, res.data);
+
+    return status;
+  } catch (error) {
+    return await axiosErrorHandler(error as AxiosError);
+  }
+}

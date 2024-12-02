@@ -14,6 +14,7 @@ interface UserRegisterResponse {
   name: string;
   email: string;
   costLimit: number;
+  balance: number;
 }
 
 interface Transaction {
@@ -55,4 +56,13 @@ interface RequestError {
 interface MoneySpentPayload {
   moneySpent: number;
   costLimit: number;
+}
+
+interface PreviousAndCurrentMonthExpenses {
+  previousMonth: number;
+  currentMonth: number;
+}
+
+interface BalancePayload {
+  balance: number;
 }
