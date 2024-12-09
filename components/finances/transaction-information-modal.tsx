@@ -18,22 +18,20 @@ export default function TransactionInformationModal({ transaction, transactionMo
         <DialogDescription>Information about the transaction</DialogDescription>
       </VisuallyHidden>
       <DialogContent className="w-dvw h-dvh fixed flex items-center justify-center left-0 top-0 bg-black/50">
-        <Card className="container max-w-96">
+        <Card className="container max-w-96 text-xs">
           <CardHeader>
             <CardTitle>Transaction Information</CardTitle>
-            <CardDescription>Details about the transaction</CardDescription>
+            <CardDescription className="text-xs">Details about the transaction</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-4 pb-4">
               <div className="flex justify-between">
-                <span>Transaction ID</span>
-                <span>{transaction.id}</span>
+                <span className="">ID</span>
+                <span className="text-xs text-right pl-2">{transaction.id}</span>
               </div>
               <div className="flex justify-between">
                 <span>Amount</span>
-                <span className="rounded-full px-2 text-xs bg-green-200 text-green-600 flex items-center justify-center">
-                  ${transaction.amount.toFixed(2)}
-                </span>
+                <span className="rounded-full px-2 text-xs bg-green-200 text-green-600 flex items-center justify-center">${transaction.amount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Type</span>
@@ -67,9 +65,7 @@ export default function TransactionInformationModal({ transaction, transactionMo
           </CardContent>
           <CardFooter>
             <DialogClose className="w-full">
-              <Button className="w-full bg-white text-black border-black border hover:text-white hover:bg-black">
-                Close
-              </Button>
+              <Button className="w-full bg-white text-black border-black border hover:text-white hover:bg-black">Close</Button>
             </DialogClose>
           </CardFooter>
         </Card>

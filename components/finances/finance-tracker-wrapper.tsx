@@ -5,18 +5,18 @@ import TransactionDialogMenu from "./transaction-dialog-menu";
 
 export default function FinanceTrackerWrapper() {
   return (
-    <Card className="px-4 py-2 max-h-fit flex flex-col">
+    <Card className="px-4 pt-2 max-h-fit flex flex-col">
       <CardHeader>
         <CardTitle className="text-2xl">Your Finances</CardTitle>
         <CardDescription className="text-xs">Manage your finances here</CardDescription>
       </CardHeader>
-      <CardContent className="flex justify-center items-center gap-x-6 gap-y-2 flex-wrap">
+      <CardContent className="flex justify-center items-center gap-x-6 gap-y-2 pb-0 flex-wrap">
         <BudgetTrackingContainers />
       </CardContent>
-      <CardContent>
+      <CardContent className="py-0">
         <RecentActivities />
       </CardContent>
-      <CardFooter>
+      <CardFooter className="">
         <TransactionDialogMenu />
       </CardFooter>
     </Card>
