@@ -1,7 +1,7 @@
 import { getBalance, getPreviousAndCurrentMonthExpenses } from "@/lib/actions/transactions/transactions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import LoadingSpinner from "../ui/loading-spinner";
-import { Pencil, TrendingDown, TrendingUp, WalletCards } from "lucide-react";
+import { TrendingDown, TrendingUp, WalletCards } from "lucide-react";
 import BudgetEditButton from "./budget-setter-button";
 
 export default async function BudgetTrackingContainers() {
@@ -22,9 +22,11 @@ export default async function BudgetTrackingContainers() {
             </CardHeader>
             <CardContent className="space-y-0 p-0 flex flex-col gap-1">
               <span className="text-xl font-bold flex gap-1">
-                {balance.data.balance}$ <BudgetEditButton />
+                {!("code" in paceData) && balance.data.balance - paceData.currentMonth}
+
+                <BudgetEditButton />
               </span>
-              <span className="text-[.7rem] text-gray-400">Monthly budget</span>
+              <span className="text-[.7rem] text-gray-400">Left out of {balance.data.balance.toFixed(2)}$</span>
             </CardContent>
           </>
         ) : (
