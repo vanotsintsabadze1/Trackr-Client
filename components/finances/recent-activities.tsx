@@ -23,7 +23,7 @@ export default async function RecentActivities() {
                   <b className="text-green-600">Amount:</b> {transaction.amount}
                 </p>
                 <p className="text-xs">
-                  <b className="text-green-600">Date:</b> {transaction.tranDate.toString()}
+                  <b className="text-green-600">Date:</b> {new Date(transaction.tranDate).toDateString()}
                 </p>
               </CardContent>
             </Card>

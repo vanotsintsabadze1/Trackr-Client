@@ -14,7 +14,7 @@ export default function TransactionDialogMenu() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full">+ Add Transaction</Button>
+        <Button className="w-full mt-4">+ Add Transaction</Button>
       </DialogTrigger>
       <DialogContent className="bg-transparent w-dvw h-dvh border-none bg-none flex items-center justify-center">
         <VisuallyHidden>
