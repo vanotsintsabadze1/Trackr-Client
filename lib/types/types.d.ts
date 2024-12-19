@@ -66,3 +66,7 @@ interface PreviousAndCurrentMonthExpenses {
 interface BalancePayload {
   balance: number;
 }
+
+interface YearlyExpense {
+  [key: string]: number;
+}

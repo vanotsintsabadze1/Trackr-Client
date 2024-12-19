@@ -1,11 +1,11 @@
 import { getLatestTransactions } from "@/lib/actions/transactions/transactions";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
 export default async function RecentActivities() {
   const res = await getLatestTransactions(5);
 
   return (
-    <Card className="h-72 overflow-y-auto border-none shadow-none">
+    <Card className="max-h-96 overflow-y-auto border-none shadow-none">
       <CardHeader>
         <CardTitle>Recent Activities</CardTitle>
         <CardDescription>Your latest financial transactions</CardDescription>

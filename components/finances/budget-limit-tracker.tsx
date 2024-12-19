@@ -33,7 +33,7 @@ export default function BudgetLimitTracker({ spent, limit }: Props) {
   return (
     <>
       {modalOpen && <BudgetLimitChangingModal initLimit={limit} setOpen={setOpen} open={modalOpen} />}
-      <Card className="flex flex-col flex-grow max-w-96 h-fit">
+      <Card className="flex flex-col flex-grow w-full h-fit">
         <CardHeader className="items-center pb-0">
           <CardTitle className="flex items-center gap-2">
             Spending Limit Tracker{" "}

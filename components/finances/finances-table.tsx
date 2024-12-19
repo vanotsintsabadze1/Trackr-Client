@@ -14,16 +14,16 @@ export default function FinancesTable({ transactions }: Props) {
 
   return (
     <>
-      <div className="flex justify-center items-centers">
+      <div className="flex justify-center items-center">
         <div className="w-full max-w-4xl px-6">
           <div className="overflow-x-auto bg-white shadow-md rounded-lg">
             <table className="w-full table-auto">
               <thead>
                 <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                  <th className="py-3 px-6 text-left">ID</th>
-                  <th className="py-3 px-6 text-right">Amount</th>
-                  <th className="py-3 px-6 text-left">Type</th>
                   <th className="py-3 px-6 text-left">Title</th>
+                  <th className="py-3 px-6 text-left">Description</th>
+                  <th className="py-3 px-6 text-left">Type</th>
+                  <th className="py-3 px-6 text-right">Amount</th>
                   <th className="py-3 px-6 text-left">Date</th>
                   <th className="py-3 px-6 text-left">Actions</th>
                 </tr>
@@ -52,11 +52,11 @@ export default function FinancesTable({ transactions }: Props) {
                       }}
                       className={`border-b border-gray-200 cursor-pointer hover:bg-gray-100 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}
                     >
-                      <td className="py-3 px-6 text-left whitespace-nowrap overflow-hidden">
-                        <span className="font-medium w-24 block overflow-hidden text-ellipsis">{transaction.id}</span>
+                      <td className="py-3 px-6 text-left">
+                        <span>{transaction.title}</span>
                       </td>
-                      <td className="py-3 px-6 text-right whitespace-nowrap">
-                        <span className="text-green-600">${transaction.amount.toFixed(2)}</span>
+                      <td className="py-3 px-6 text-left truncate max-w-[5rem]">
+                        <span>{transaction.description}</span>
                       </td>
                       <td className="py-3 px-6 text-left whitespace-nowrap">
                         <span className="py-1 px-3 rounded-full text-xs text-green-600 bg-green-200">
@@ -77,8 +77,8 @@ export default function FinancesTable({ transactions }: Props) {
                             : "Unknown"}
                         </span>
                       </td>
-                      <td className="py-3 px-6 text-left">
-                        <span>{transaction.title}</span>
+                      <td className="py-3 px-6 text-right whitespace-nowrap">
+                        <span className="text-green-600">${transaction.amount.toFixed(2)}</span>
                       </td>
                       <td className="py-3 px-6 text-left whitespace-nowrap">
                         <span>{new Date(transaction.tranDate).toLocaleDateString()}</span>

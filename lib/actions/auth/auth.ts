@@ -10,7 +10,7 @@ import { cookies } from "next/headers";
 
 export async function login(user: UserLoginRequest) {
   try {
-    const res = await AxiosService.post("v1/User/Login", user);
+    const res = await AxiosService.post("v1/user/login", user);
     const status = checkStatus<string>(res.status, res.data);
 
     if (status.type === HttpStatusTypes.Success) {
@@ -25,7 +25,7 @@ export async function login(user: UserLoginRequest) {
 
 export async function register(user: UserRegisterRequest) {
   try {
-    const res = await AxiosService.post("/v1/User/Register", user, {
+    const res = await AxiosService.post("/v1/user/register", user, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -42,7 +42,6 @@ export async function register(user: UserRegisterRequest) {
 }
 
 export async function logout() {
-  cookies().delete("session");
-
+  cookies().delete("token");
   return Ok();
 }
