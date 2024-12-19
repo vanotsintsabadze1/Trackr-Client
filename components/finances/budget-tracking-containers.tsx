@@ -22,7 +22,7 @@ export default async function BudgetTrackingContainers() {
             </CardHeader>
             <CardContent className="space-y-0 p-0 flex flex-col gap-1">
               <span className="text-xl font-bold flex gap-1">
-                {!("code" in paceData) && balance.data.balance - paceData.currentMonth}
+                {!("code" in paceData) && (balance.data.balance - paceData.currentMonth).toFixed(2)}
 
                 <BudgetEditButton />
               </span>
@@ -46,9 +46,9 @@ export default async function BudgetTrackingContainers() {
               <>
                 <span>
                   {paceData.currentMonth > paceData.previousMonth ? (
-                    <span className="text-red-500 font-bold text-xl">-{paceData.currentMonth - paceData.previousMonth}$</span>
+                    <span className="text-red-500 font-bold text-xl">-{(paceData.currentMonth - paceData.previousMonth).toFixed(2)}$</span>
                   ) : (
-                    <span className="text-green-500">+{paceData.currentMonth - paceData.previousMonth}$</span>
+                    <span className="text-green-500">+{(paceData.currentMonth - paceData.previousMonth).toFixed(2)}$</span>
                   )}
                 </span>
                 <span className="text-[.7rem] text-gray-400">

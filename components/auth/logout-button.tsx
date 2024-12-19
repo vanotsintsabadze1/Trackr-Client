@@ -8,6 +8,7 @@ export default function LogOutButton() {
   const router = useRouter();
 
   async function handleLogOut() {
+    console.log("hey");
     await logout();
     router.refresh();
   }
